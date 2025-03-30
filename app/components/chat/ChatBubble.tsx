@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import Image from "next/image";
 
 interface ChatBubbleProps {
   role: "user" | "assistant";
@@ -11,9 +11,7 @@ export function ChatBubble({ role, content, timestamp, avatar }: ChatBubbleProps
   const isUser = role === "user";
 
   const renderContent = (text: string) => {
-    // Split into lines for processing
     const lines = text.split("\n").map((line, index) => {
-      // Code block detection (```text``` or common code patterns)
       if (
         line.startsWith("```") && line.endsWith("```") ||
         line.match(/^\s*(function|const|let|var|class|if|for|while|return|\{|\}|\()/)
@@ -29,12 +27,10 @@ export function ChatBubble({ role, content, timestamp, avatar }: ChatBubbleProps
         );
       }
 
-      // Process bold (**text**) and italics (*text*) with Tailwind
       let formattedLine = line;
       formattedLine = formattedLine.replace(/\*\*(.*?)\*\*/g, (_, match) => `<span class="font-bold">${match}</span>`);
       formattedLine = formattedLine.replace(/\*(.*?)\*/g, (_, match) => `<span class="italic">${match}</span>`);
 
-      // Blue highlights for assistant keywords
       if (!isUser) {
         const keywords = ["code", "example", "important", "note", "key"];
         keywords.forEach((word) => {
@@ -57,10 +53,12 @@ export function ChatBubble({ role, content, timestamp, avatar }: ChatBubbleProps
   return (
     <div className={`flex ${isUser ? "justify-end" : "justify-start"} mb-4 items-start`}>
       {!isUser && avatar && (
-        <img
+        <Image
           src={avatar}
           alt="Assistant Avatar"
-          className="w-8 h-8 rounded-full mr-2 mt-1 border border-gray-300 dark:border-gray-600"
+          width={32}
+          height={32}
+          className="rounded-full mr-2 mt-1 border border-gray-300 dark:border-gray-600"
         />
       )}
       <div
@@ -82,10 +80,12 @@ export function ChatBubble({ role, content, timestamp, avatar }: ChatBubbleProps
         )}
       </div>
       {isUser && avatar && (
-        <img
+        <Image
           src={avatar}
           alt="User Avatar"
-          className="w-8 h-8 rounded-full ml-2 mt-1 border border-gray-300 dark:border-gray-600"
+          width={32}
+          height={32}
+          className="rounded-full ml-2 mt-1 border border-gray-300 dark:border-gray-600"
         />
       )}
     </div>
